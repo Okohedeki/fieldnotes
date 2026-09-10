@@ -172,3 +172,4 @@ document.addEventListener('click',async e=>{
 });
 window.addEventListener('hashchange',()=>{render();$('#main').focus({preventScroll:true});window.scrollTo(0,0);});
 window.addEventListener('storage',e=>{if(e.key===STORE){state=loadState();editing=null;inspirationEditing=null;inspirationScratch={};inspirationFilter='all';render();toast('Workspace updated from another tab.');}});
+let currentDay=dayKey();
