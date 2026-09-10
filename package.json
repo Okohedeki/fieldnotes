@@ -1,0 +1,15 @@
+{
+  "name": "fieldnotes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A local-first publishing consistency workspace and social post inspiration tracker.",
+  "license": "MIT",
+  "scripts": {
+    "check": "node --check inspiration.js && node --check consistency-model.js && node --check consistency.js",
+    "test": "node --test tests/model.test.cjs",
+    "test:browser": "node tests/browser.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
