@@ -85,3 +85,14 @@ function render() {
 }
 function rememberPost() {try {sessionStorage.setItem('fieldnotes.openPost',editing.id);}catch{}}
 function openPost(post) {editing=post;rememberPost();if(location.hash==='#write')render();else location.hash='write';}
+function persistEditor() {
+  const form=$('#post-form');if(!form||!editing)return;
+  const values=Object.fromEntries(new FormData(form));
+  Object.assign(editing,values);
+  const index=state.posts.findIndex(p=>p.id===editing.id);
+  if(index<0)state.posts.push(editing);else state.posts[index]=editing;
+  rememberPost();
+  save();
+  $('#char-count').textContent=`${editing.body.length.toLocaleString()} characters`;
+  $('[data-action="publish"]').disabled=!editing.body.trim()&&editing.status!=='published';
+}
