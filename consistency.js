@@ -174,3 +174,4 @@ window.addEventListener('hashchange',()=>{render();$('#main').focus({preventScro
 window.addEventListener('storage',e=>{if(e.key===STORE){state=loadState();editing=null;inspirationEditing=null;inspirationScratch={};inspirationFilter='all';render();toast('Workspace updated from another tab.');}});
 let currentDay=dayKey();
 setInterval(()=>{if(currentDay!==dayKey()){currentDay=dayKey();if(location.hash!=='#write')render();}},30000);
+render();
