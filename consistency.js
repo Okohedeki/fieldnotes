@@ -121,3 +121,20 @@ document.addEventListener('change',async e=>{
     const kind=e.target.dataset.count;setCount(kind,Number(e.target.value));$(`[data-count="${kind}"]`).focus();
   }
 });
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(e.target.id==='topic-form') {
+    const topic=new FormData(e.target).get('topic').trim().replace(/\s+/g,' ');
+    const topics=state.settings.markovTopics;
+    if(!topic||topics.some(t=>t.toLowerCase()===topic.toLowerCase())) {$('#topic-error').textContent=topic?'That topic is already in your list.':'Enter a topic to add.';return;}
+    if(topics.length>=12)return;
+    topics.push(topic);save();render();$('#new-topic').focus();toast('Writing topic saved.');
+  }
+  if(e.target.id==='target-form') {state.settings.comments=Number(new FormData(e.target).get('comments'));save();render();toast('Weekly comment target saved.');}
+  if(e.target.id==='person-form') {
+    const values=Object.fromEntries(new FormData(e.target));values.name=values.name.trim();
+    if(!values.name||!safeURL(values.url)) {$('#person-error').textContent='Enter a name and a secure linkedin.com profile URL.';return;}
+    if(personEditing)Object.assign(personEditing,values);else state.people.push({...values,id:crypto.randomUUID(),channel:'linkedin'});
+    personEditing=null;save();render();toast('Person saved.');
+  }
+});
