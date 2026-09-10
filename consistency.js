@@ -38,3 +38,4 @@ function todayView() {
   <aside class="context-column">${weekScore()}<div class="small-note"><span class="eyebrow">THE DAILY LOOP</span><p>Plan → Write → Publish<br>Engage → Repeat</p></div></aside></div>
   ${overdue.length?`<section class="recovery"><div><h2>Pick up where you left off</h2><p>${overdue.length} earlier draft${overdue.length===1?'':'s'} ready to move forward. Reschedule or publish when ready.</p></div><button data-action="edit-post" data-id="${esc(overdue[0].id)}">Continue draft ↗</button></section>`:''}`;
 }
+function postRow(p) {return `<button class="post-row" data-action="edit-post" data-id="${esc(p.id)}"><div>${badge(p.type)}<strong>${esc(p.title||'Untitled post')}</strong></div><span>${p.date?pretty(p.date):'Unscheduled'} · ${esc(p.status)} ↗</span></button>`;}
