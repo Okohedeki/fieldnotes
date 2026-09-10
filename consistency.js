@@ -83,3 +83,4 @@ function render() {
   $('#breadcrumb').textContent=route[0].toUpperCase()+route.slice(1);
   if(storageProblem) $('#save-status').textContent='Not saved · export your work';
 }
+function rememberPost() {try {sessionStorage.setItem('fieldnotes.openPost',editing.id);}catch{}}
