@@ -170,3 +170,4 @@ document.addEventListener('click',async e=>{
   if(action==='restore') $('#backup-file').click();
   if(action==='export') {const url=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`fieldnotes-${dayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 });
+window.addEventListener('hashchange',()=>{render();$('#main').focus({preventScroll:true});window.scrollTo(0,0);});
