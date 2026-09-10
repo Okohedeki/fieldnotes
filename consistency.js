@@ -138,3 +138,35 @@ document.addEventListener('submit',e=>{
     personEditing=null;save();render();toast('Person saved.');
   }
 });
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-action]');if(!b)return;
+  const action=b.dataset.action,id=b.dataset.id;
+  if(action==='remove-topic') {state.settings.markovTopics.splice(Number(b.dataset.index),1);save();render();$('#new-topic').focus();toast('Writing topic removed.');}
+  if(['today-post','next-draft','new-post','new-date','edit-post'].includes(action)) {
+    e.preventDefault();
+    const date=action==='next-draft'?nextPostDate():b.dataset.date||dayKey();
+    openPost(action==='edit-post'?state.posts.find(p=>p.id===id):action==='new-post'||action==='new-date'?newPost(date):postForDate(date)||newPost(date));return;
+  }
+  if(action==='count') {const kind=b.dataset.kind;setCount(kind,Math.max(0,activity()[kind]+Number(b.dataset.delta)));const focus=$(`[data-kind="${kind}"][data-delta="${b.dataset.delta}"]`);if(!focus.disabled)focus.focus();else $(`[data-kind="${kind}"][data-delta="1"]`).focus();}
+  if(action==='draft-check') {changeActivity(dayKey(),{draft:!activity().draft});save();render();$('[data-action="draft-check"]').focus();}
+  if(action==='week-shift') {selectedWeek=shiftDay(selectedWeek,Number(b.dataset.delta));render();}
+  if(action==='current-week') {selectedWeek=weekKey();render();}
+  if(action==='copy-post') {try {await navigator.clipboard.writeText(editing.body);toast('Post copied.');}catch{toast('Select your post text and copy it manually.');}}
+  if(action==='publish') {
+    persistEditor();
+    editing.status=editing.status==='published'?'draft':'published';
+    editing.publishedAt=editing.status==='published'?dayKey():null;
+    save();render();toast(editing.status==='published'?'Published post counted for this week.':'Publication undone.');
+  }
+  if(action==='person-comment') {
+    const a=activity(),has=a.people.includes(id);
+    changeActivity(dayKey(),{people:has?a.people.filter(p=>p!==id):[...a.people,id],comments:Math.max(0,a.comments+(has?-1:1))});
+    save();render();$(`[data-action="person-comment"][data-id="${CSS.escape(id)}"]`).focus();toast(has?'Comment removed.':'Comment counted toward today and this week.');
+  }
+  if(action==='edit-person') {personEditing=state.people.find(p=>p.id===id);render();$('#person-form input').focus();}
+  if(action==='cancel-person') {personEditing=null;render();}
+  if(action==='remove-person'&&confirm('Remove this person from your list? Logged comment totals will stay.')) {state.people=state.people.filter(p=>p.id!==id);if(personEditing?.id===id)personEditing=null;save();render();}
+  if(action==='delete-post'&&confirm('Delete this post? If published, it will also be removed from your weekly count.')) {state.posts=state.posts.filter(p=>p.id!==editing.id);editing=null;save();render();toast('Post deleted.');}
+  if(action==='restore') $('#backup-file').click();
+  if(action==='export') {const url=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`fieldnotes-${dayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+});
