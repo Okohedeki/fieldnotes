@@ -1,0 +1,19 @@
+# Publish only the reviewed application and contributor files.
+/*
+!/.gitignore
+!/LICENSE
+!/README.md
+!/CONTRIBUTING.md
+!/package.json
+!/index.html
+!/consistency.css
+!/consistency.js
+!/consistency-model.js
+!/inspiration.js
+!/server.py
+!/Start Fieldnotes.cmd
+!/tests/
+/tests/*
+!/tests/model.test.cjs
+!/tests/browser.cjs
+!/tests/README.md
