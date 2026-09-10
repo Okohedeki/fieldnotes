@@ -84,3 +84,4 @@ function render() {
   if(storageProblem) $('#save-status').textContent='Not saved · export your work';
 }
 function rememberPost() {try {sessionStorage.setItem('fieldnotes.openPost',editing.id);}catch{}}
+function openPost(post) {editing=post;rememberPost();if(location.hash==='#write')render();else location.hash='write';}
