@@ -97,3 +97,8 @@ function persistEditor() {
   $('[data-action="publish"]').disabled=!editing.body.trim()&&editing.status!=='published';
 }
 document.addEventListener('input',e=>{if(e.target.closest('#post-form'))persistEditor();});
+function setCount(kind,value) {
+  const change={[kind]:value};
+  if(kind==='comments'&&value<activity().people.length)change.people=activity().people.slice(0,value);
+  changeActivity(dayKey(),change);save();render();
+}
