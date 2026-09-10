@@ -10,3 +10,4 @@ function save() {
   try {localStorage.setItem(STORE,JSON.stringify(state));$('#save-status').textContent='Saved on this device';return true;}
   catch {$('#save-status').textContent='Not saved · export your work';toast('Storage is full or unavailable. Export your work before closing.');return false;}
 }
+function badge(type) {return `<span class="badge ${esc(type)}">${TYPES[type]||'Reach'}</span>`;}
