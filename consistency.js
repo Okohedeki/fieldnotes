@@ -12,3 +12,4 @@ function save() {
 }
 function badge(type) {return `<span class="badge ${esc(type)}">${TYPES[type]||'Reach'}</span>`;}
 function heading(kicker,title,description,action='') {return `<div class="heading"><div><div class="eyebrow">${kicker}</div><h1>${title}</h1><p>${description}</p></div>${action}</div>`;}
+function progress(label,value,target) {return `<div class="progress-item"><div><span>${label}</span><strong>${value}<span> / ${target}</span></strong></div><progress aria-label="${label}" value="${Math.min(value,target)}" max="${Math.max(1,target)}"></progress></div>`;}
