@@ -75,3 +75,11 @@ function peopleView() {
   <aside><section class="person-form-surface"><h2>${p?'Edit person':'Add to your circle'}</h2><form id="person-form"><label>Name<input name="name" required maxlength="100" value="${esc(p?.name)}" placeholder="Their name"></label><label>LinkedIn profile URL<input name="url" required type="url" value="${esc(p?.url)}" placeholder="https://www.linkedin.com/in/…"></label><label>A note to remember<input name="note" maxlength="250" value="${esc(p?.note)}" placeholder="Why you want to stay in touch"></label><p id="person-error" class="form-error" role="alert"></p><button class="primary" type="submit">${p?'Save person':'+ Add person'}</button>${p?'<button type="button" data-action="cancel-person">Cancel</button>':''}</form></section><div class="small-note"><span class="eyebrow">MAKE IT MEANINGFUL</span><p>Add something to the conversation.</p><span>Share an experience. Ask a thoughtful question. Offer a useful example.</span></div></aside></div>`;
 }
 const views={today:todayView,week:weekView,write:writeView,people:peopleView};
+function render() {
+  let route=location.hash.slice(1);
+  if(!Object.hasOwn(views,route)) {route='today';history.replaceState(null,'','#today');}
+  $('#main').innerHTML=(storageProblem?`<p class="storage-error" role="alert">${storageProblem}</p>`:'')+views[route]();
+  document.querySelectorAll('[data-nav]').forEach(a=>{a.classList.toggle('active',a.dataset.nav===route);if(a.dataset.nav===route)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  $('#breadcrumb').textContent=route[0].toUpperCase()+route.slice(1);
+  if(storageProblem) $('#save-status').textContent='Not saved · export your work';
+}
