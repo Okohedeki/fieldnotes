@@ -102,3 +102,22 @@ function setCount(kind,value) {
   if(kind==='comments'&&value<activity().people.length)change.people=activity().people.slice(0,value);
   changeActivity(dayKey(),change);save();render();
 }
+document.addEventListener('change',async e=>{
+  if(e.target.id==='backup-file') {
+    const file=e.target.files[0];if(!file)return;
+    try {
+      if(file.size>20000000)throw Error('Backup too large');
+      const raw=JSON.parse(await file.text());
+      const restored=validateState(raw.version===1?migrateLegacy(raw):raw);
+      if(confirm('Replace this workspace with the backup? Export your current work first if you want to keep it.')) {
+        localStorage.setItem(STORE,JSON.stringify(restored));state=restored;storageProblem='';editing=null;personEditing=null;inspirationEditing=null;inspirationScratch={};inspirationFilter='all';render();save();toast('Backup restored.');
+      }
+    } catch {toast('Could not restore this backup. Your current workspace is unchanged.');}
+    e.target.value='';
+  }
+  if(e.target.name==='type'&&e.target.closest('#post-form')){persistEditor();render();}
+  if(e.target.dataset.count) {
+    if(!e.target.checkValidity()||e.target.value===''){e.target.reportValidity();return;}
+    const kind=e.target.dataset.count;setCount(kind,Number(e.target.value));$(`[data-count="${kind}"]`).focus();
+  }
+});
