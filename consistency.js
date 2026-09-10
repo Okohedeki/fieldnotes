@@ -96,3 +96,4 @@ function persistEditor() {
   $('#char-count').textContent=`${editing.body.length.toLocaleString()} characters`;
   $('[data-action="publish"]').disabled=!editing.body.trim()&&editing.status!=='published';
 }
+document.addEventListener('input',e=>{if(e.target.closest('#post-form'))persistEditor();});
