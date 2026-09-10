@@ -11,3 +11,4 @@ function save() {
   catch {$('#save-status').textContent='Not saved · export your work';toast('Storage is full or unavailable. Export your work before closing.');return false;}
 }
 function badge(type) {return `<span class="badge ${esc(type)}">${TYPES[type]||'Reach'}</span>`;}
+function heading(kicker,title,description,action='') {return `<div class="heading"><div><div class="eyebrow">${kicker}</div><h1>${title}</h1><p>${description}</p></div>${action}</div>`;}
