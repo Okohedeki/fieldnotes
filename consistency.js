@@ -17,3 +17,7 @@ function weekScore(week=weekKey()) {
   const s=summary(week);
   return `<section class="score"><div class="section-title"><h2>This week</h2><span>${pretty(week)}–${pretty(shiftDay(week,6))}</span></div>${progress('Posts published',s.posts.length,5)}${progress('Connections',s.connections,100)}${progress('Meaningful comments',s.comments,state.settings.comments)}<div class="rhythm-summary">${Object.entries(TYPES).map(([k,v])=>`<div>${badge(k)}<strong>${s.posts.filter(p=>p.type===k).length} / ${k==='bottom'?1:2}</strong></div>`).join('')}</div><p class="helper">Every post counts. A missed day is room to adjust, not a reset.</p><a class="inline-link" href="#week">See your week <span>↗</span></a></section>`;
 }
+function counter(kind,label,detail,target,index) {
+  const value=activity()[kind],done=value>=target;
+  return `<article class="task ${done?'complete':''}"><span class="task-state" aria-label="${done?'Complete':'In progress'}">${done?'✓':index}</span><div class="task-content"><h3>${label}</h3><p>${detail}</p><span class="task-status">${done?'Complete for today':`${Math.max(0,target-value)} to go today`}</span></div><div class="counter"><button data-action="count" data-kind="${kind}" data-delta="-1" aria-label="Subtract one ${kind}" ${value===0?'disabled':''}>−</button><input aria-label="Today’s ${kind} count" data-count="${kind}" type="number" min="0" max="100000" step="1" value="${value}"><small>/ ${target}</small><button data-action="count" data-kind="${kind}" data-delta="1" aria-label="Add one ${kind}">+</button></div></article>`;
+}
