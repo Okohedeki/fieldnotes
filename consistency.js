@@ -5,3 +5,8 @@ const pretty = (date,options={month:'short',day:'numeric'})=>parseDay(date).toLo
 let selectedWeek=weekKey(), editing=null, toastTimer, personEditing=null;
 try {editing=state.posts.find(p=>p.channel==='linkedin'&&p.id===sessionStorage.getItem('fieldnotes.openPost'))||null;}catch{}
 function toast(message) {$('#toast').textContent=message;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3500);}
+function save() {
+  if(storageProblem) {$('#save-status').textContent='Not saved · export your work';return false;}
+  try {localStorage.setItem(STORE,JSON.stringify(state));$('#save-status').textContent='Saved on this device';return true;}
+  catch {$('#save-status').textContent='Not saved · export your work';toast('Storage is full or unavailable. Export your work before closing.');return false;}
+}
